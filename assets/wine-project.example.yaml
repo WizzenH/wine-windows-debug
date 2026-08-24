@@ -1,0 +1,43 @@
+version: 1
+
+application:
+  executable: "/workspace/app/example.exe"
+  arguments: []
+  working_directory: "/workspace/app"
+  reproduce_command: "./scripts/reproduce.sh"
+  success_signal: "Process exits 0 and the reported UI/function behaves correctly"
+
+container:
+  runtime: "docker"
+  compose_file: "compose.yaml"
+  service: "wine-test"
+  disposable: true
+  network: "disabled-unless-required"
+
+wine:
+  binary: "/opt/wine/bin/wine"
+  prefix: "/var/lib/wine-prefixes/app-test"
+  prefix_is_disposable: true
+  architecture: "win64"
+
+source:
+  repository: "/workspace/src/wine"
+  base_ref: "main"
+  branch_prefix: "codex/wine-fix-"
+  configure_command: "./configure --enable-win64"
+  build_command: "make -j$(nproc)"
+  test_command: "./scripts/test-wine-build.sh"
+  allow_local_commit: true
+  never_push: true
+
+artifacts:
+  runtime_directory: ".codex/wine-runs"
+  report_directory: "docs/wine-fixes"
+
+policy:
+  allow_container_recreate: true
+  allow_registry_changes_in_selected_prefix: true
+  allow_container_config_changes: true
+  allow_wine_source_patch: true
+  preserve_user_worktree_changes: true
+

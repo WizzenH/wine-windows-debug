@@ -1,0 +1,4 @@
+interface:
+  display_name: "Wine Windows Debug"
+  short_description: "Automate Wine app diagnosis, fixes, tests, and reports"
+  default_prompt: "Use $wine-windows-debug to diagnose this Windows application failure under Wine and carry the fix through testing and documentation."
