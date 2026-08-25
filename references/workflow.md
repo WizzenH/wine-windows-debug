@@ -11,6 +11,7 @@ Collect facts without mutation:
 - `wine --version`, binary path, architecture, `WINEPREFIX`, DLL overrides, installed verbs/packages, and registry files;
 - host and container kernel, CPU architecture, graphics devices, driver versions, Vulkan/OpenGL capabilities, display server, and audio stack when relevant;
 - Wine source repository path, revision, patch state, build directory, and documented build/test commands;
+- upstream or vendor origin, branch/tag relationship, downstream patch stack, and the last known-good revision when available;
 - objective success signal and the user's original symptom.
 
 Record `git status --short`, the container/image identity, and prefix identity before changing anything.
@@ -51,6 +52,22 @@ Common classes include:
 - Wine implementation gap or regression;
 - container isolation, mount, device, seccomp, permission, or environment problem.
 
+Read [components.md](components.md) when component ownership is unclear. Select the narrowest component whose behavior can explain all primary observations, but keep adjacent boundaries in the hypothesis table when a translation layer may only be surfacing a lower-layer failure.
+
+### Regression provenance check
+
+Run this check when the symptom appeared after a Wine/application/container update, differs across revisions, points to a recently changed Wine subsystem, or would otherwise require a Wine source patch.
+
+1. Record the exact bad revision, last known-good revision or release, branch topology, and downstream/vendor patches. Do not compare version labels without resolving their commits.
+2. Identify the narrowest relevant path, symbol, registry behavior, protocol, or test. Inspect first-parent and full history as appropriate, including renames.
+3. Use path history plus pickaxe searches (`git log -S` for changed strings/symbol occurrences and `git log -G` for matching diff lines). Use `git blame` only to locate candidate history; blame is not proof of causation.
+4. Read candidate commits in full: parent diff, commit message, tests, follow-up fixes, reverts, and affected architecture. Check whether the project carries or omits the patch downstream.
+5. Confirm causality with identical controlled builds of a known-good and bad revision. If practical, test a diagnostic revert or cherry-pick in an isolated worktree.
+6. When the range is still broad and the reproducer has a deterministic pass/fail exit signal, run `git bisect` in a disposable linked worktree. Record good/bad anchors, skipped unbuildable commits, test command, and first-bad result. Never run a noisy or subjective visual test unattended as a bisect oracle.
+7. Classify the result as `confirmed regression`, `suspected regression`, `pre-existing implementation gap`, or `not attributable`. A temporal correlation or touching the same file is only suspected evidence.
+
+Do not make reverting an upstream patch the permanent solution merely because it restores behavior. Use a revert as an experiment, then determine whether the durable result should be a forward fix, backport, configuration guard, or documented version pin.
+
 ## 4. EXPERIMENT
 
 Choose one primary change and write before execution:
@@ -87,6 +104,8 @@ Use the same inputs and runtime boundary for base and candidate. Verify:
 6. branch builds invoke the branch-built Wine binaries and libraries.
 
 Record duration, exit status, artifact hashes or revisions, and concise log evidence.
+
+For a regression claim, verification must include the tested good/bad revisions and the introducing commit or bounded suspect range. Confirm that the final candidate works on the intended base rather than only on the historical good revision.
 
 ## 7. AWAITING_USER_VALIDATION
 
