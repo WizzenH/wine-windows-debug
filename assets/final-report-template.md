@@ -37,6 +37,19 @@
 
 -
 
+## Regression provenance
+
+- Classification: `<confirmed regression | suspected regression | pre-existing implementation gap | not attributable | not investigated because source regression was excluded>`
+- Bad revision:
+- Last known-good revision:
+- Suspected or confirmed introducing commit:
+- Affected component/path/symbol:
+- History methods used: `<path log | -S | -G | blame | bisect | controlled revert/cherry-pick>`
+- Good/bad build evidence:
+- Relevant follow-up, revert, downstream, or vendor patches:
+
+Do not name an introducing commit without controlled evidence. If only a suspect range is known, report the range and why it could not be narrowed.
+
 ## Solution
 
 - Solution class: `<launch configuration | prefix/registry | container | Wine source | workaround>`
@@ -51,6 +64,7 @@
 - Base revision:
 - Branch/worktree:
 - Commit(s):
+- Suspected or confirmed introducing commit:
 - Diff summary:
 - Build command and toolchain:
 
@@ -86,3 +100,4 @@ Include exact registry restoration, container/config reversal, and branch select
 | State | Evidence or decision | Result |
 |---|---|---|
 | | | |
+
