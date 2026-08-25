@@ -57,6 +57,12 @@ When a Wine source regression is plausible, the skill inspects relevant path and
 
 A recent commit touching the same file is treated only as a lead. The final report classifies the result as a confirmed regression, suspected regression, pre-existing implementation gap, or not attributable, and records the introducing commit or bounded suspect range with test evidence.
 
+## Controlled self-iteration
+
+The skill may improve its own local instructions from demonstrated gaps found during real debugging runs. It separates reusable lessons from project-specific details, applies at most one coherent improvement batch per issue, validates the changed skill and references, and records the change in the final report.
+
+Self-iteration is enabled by default and can be disabled through `skill_iteration.enabled` in `.codex/wine-workflow.yaml`. It affects only this skill and never pushes, publishes, changes licensing, or modifies other Codex skills automatically.
+
 ## Safety and repository discipline
 
 - Prefer a disposable container and dedicated `WINEPREFIX`.
