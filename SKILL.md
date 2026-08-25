@@ -31,7 +31,7 @@ The high-level sequence is:
 
 1. **Discover and baseline** — identify executable, container, Wine binary/version/architecture, prefix, source revision, graphics stack, launch command, and success signal. Capture repository dirtiness before mutation.
 2. **Reproduce** — run the smallest faithful reproduction and save the command, exit status, relevant logs, and observable failure. A failed reproduction is a finding, not permission to guess.
-3. **Diagnose** — rank falsifiable hypotheses and choose the cheapest discriminating experiment. Use the adaptive log guidance in [diagnostics.md](references/diagnostics.md).
+3. **Diagnose** — map the symptom to the responsible component, rank falsifiable hypotheses, and choose the cheapest discriminating experiment. Read [components.md](references/components.md) to distinguish what each application, Wine, translation, host, and container layer can actually fix. Use the adaptive log guidance in [diagnostics.md](references/diagnostics.md).
 4. **Fix by escalation** — prefer, in order: launch/environment settings; prefix/DLL/registry settings; container dependencies/configuration; Wine source patch. Skip a lower layer only when evidence excludes it.
 5. **Verify** — rerun the original reproduction under controlled A/B conditions, run targeted regression tests, and check that the apparent fix did not come from an unrelated prefix, cache, image, or dependency change.
 6. **User validation** — provide exact validation steps and the expected result. Pause for the user's judgment of the real application behavior.
@@ -49,13 +49,14 @@ The high-level sequence is:
 
 Only patch Wine source when evidence shows that configuration or dependency changes are insufficient or the project explicitly requires a source-level fix.
 
-1. Inspect the source repository, base revision, remotes, build instructions, and current status.
+1. Inspect the source repository, base revision, remotes, build instructions, current status, vendor patch stack, and relevant commit history.
 2. Create a separate local branch named `codex/wine-fix-<issue-slug>`. If the current worktree is dirty or in active use, create a linked worktree for the branch instead of disturbing it.
-3. Reproduce against the unmodified base using the same build and runtime conditions.
-4. Implement the smallest source change that tests the leading hypothesis. Keep generated files and build output out of commits.
-5. Compile in an isolated build directory, capture the exact command and compiler/toolchain versions, and test the built Wine rather than a system Wine by mistake.
-6. Run the original reproducer plus relevant Wine tests or project smoke tests. Compare with the base result.
-7. After verification, create at most one local commit per logical fix when repository policy permits. Do not push. Report branch, worktree, commit, diff summary, and remaining uncommitted files.
+3. If a regression is plausible, inspect the log for the affected component and function before writing a patch. Use path history, pickaxe search, blame, release/tag comparison, and—when a known-good revision and deterministic reproducer exist—`git bisect`. Treat a nearby commit as a lead, not proof; confirm it by controlled good/bad builds or a diagnostic revert. Follow the regression procedure in [workflow.md](references/workflow.md).
+4. Reproduce against the unmodified base using the same build and runtime conditions.
+5. Implement the smallest source change that tests the leading hypothesis. Keep generated files and build output out of commits.
+6. Compile in an isolated build directory, capture the exact command and compiler/toolchain versions, and test the built Wine rather than a system Wine by mistake.
+7. Run the original reproducer plus relevant Wine tests or project smoke tests. Compare with the base result.
+8. After verification, create at most one local commit per logical fix when repository policy permits. Do not push. Report branch, worktree, commit, diff summary, suspected or confirmed introducing commit, and remaining uncommitted files.
 
 ## Completion and stopping rules
 
@@ -64,3 +65,4 @@ Only patch Wine source when evidence shows that configuration or dependency chan
 - After three failed interventions in one mutation layer, return to diagnosis before escalating; do not accumulate random tweaks.
 - Stop as blocked only when safe investigation paths are exhausted or the next action requires unavailable user-only access. State the exact missing capability and preserve the run ledger.
 - The final handoff must identify: disposition, confidence, user validation status, changed files/state, Wine branch/commit if any, test evidence, rollback, report path, and unresolved risks.
+
