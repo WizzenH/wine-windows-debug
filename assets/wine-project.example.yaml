@@ -34,6 +34,11 @@ artifacts:
   runtime_directory: ".codex/wine-runs"
   report_directory: "docs/wine-fixes"
 
+skill_iteration:
+  enabled: true
+  source_checkout: null
+  never_push: true
+
 policy:
   allow_container_recreate: true
   allow_registry_changes_in_selected_prefix: true
