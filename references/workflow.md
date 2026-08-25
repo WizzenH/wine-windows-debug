@@ -120,7 +120,31 @@ Do not ask the user to diagnose logs. Ask only whether the original problem is s
 
 If validation fails, return to BASELINE_REPRODUCTION using the user's new observation as evidence.
 
-## 8. REPORTING
+## 8. SKILL_IMPROVEMENT
+
+Evaluate whether the run exposed a reusable gap in `wine-windows-debug`. Skip mutation when the current skill was adequate.
+
+Route the finding before editing:
+
+| Finding | Destination |
+|---|---|
+| Project path, command, container name, application quirk, or customer-specific workaround | project contract or final report |
+| Reusable decision rule, component boundary, safety invariant, or verification requirement | `SKILL.md` or a focused reference |
+| Repeated deterministic operation whose manual recreation caused errors | a skill script, with an observable test |
+| Missing evidence or review field | report/config asset |
+| Speculation not supported by the completed run | do not encode it |
+
+For an eligible improvement:
+
+1. Quote or reference the run evidence that exposed the gap and state the generalized lesson without application-specific details.
+2. Locate the active skill and any source checkout declared by the project. Compare identity and existing changes before editing; do not overwrite unrelated work.
+3. Apply one small coherent update batch. Do not change another skill, global Codex behavior, licensing, invocation policy, or publishing state.
+4. Run the official skill validator when available, resolve every changed relative link, and test changed scripts. Roll back only this iteration if validation fails.
+5. Add the change and validation result to the run ledger. Do not push. If the installed copy and source checkout could not both be updated, identify which one is authoritative and which remains pending.
+
+If an active instruction is unsafe, factually wrong, or prevents continued diagnosis, perform this checkpoint immediately and then resume the previous workflow state. Otherwise perform it after user validation and before the final report. Limit normal runs to one coherent self-iteration batch so skill editing does not replace solving the application problem.
+
+## 9. REPORTING
 
 Write the final report only after the user's runtime validation, unless blocked. Use the supplied template and keep factual evidence separate from inference. Include a complete rollback and distinguish permanent changes from diagnostic residue.
 
