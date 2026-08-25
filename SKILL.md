@@ -37,6 +37,19 @@ The high-level sequence is:
 6. **User validation** — provide exact validation steps and the expected result. Pause for the user's judgment of the real application behavior.
 7. **Document** — after validation, produce a report based on [final-report-template.md](assets/final-report-template.md), including rollback and residual risks. Pause for final compliance review.
 
+## Controlled skill self-iteration
+
+This skill is authorized to improve its own local instructions and supporting resources from evidence gathered during Wine debugging. Treat self-iteration as enabled unless the current user or `.codex/wine-workflow.yaml` explicitly disables it. This authorization does not extend to other skills, Codex configuration, external publication, or pushing a repository.
+
+- Iterate only when a demonstrated workflow gap, incorrect instruction, missing reusable diagnostic boundary, repeated manual procedure, or inadequate verification/report field materially affected the run.
+- Put project-specific commands, paths, application quirks, customer data, and one-off workarounds in the project contract or final report, not in the reusable skill.
+- Make the smallest coherent change. Preserve the skill's scope, safety rules, user checkpoints, and invocation policy unless the user explicitly changes them.
+- Prefer one skill-update batch per diagnosed issue. Update earlier only when the current instruction is unsafe, incorrect, or blocks continued evidence collection.
+- Before editing, identify the active skill path and any configured source checkout, record the files and reason, and preserve unrelated changes. Update both only after verifying they represent the same skill; otherwise update the active local skill and report the unsynchronized source.
+- Validate the updated skill with the available official validator, check all changed references, and run any changed scripts. If validation fails, restore only the skill files changed by the current iteration and continue with the last valid version.
+- The current run may follow the corrected rule explicitly, but state that newly loaded skill instructions take effect on the next Codex invocation.
+- Record the triggering evidence, generalized lesson, changed skill files, validation result, and whether a source checkout remains unsynchronized. Never push the self-iteration automatically.
+
 ## Mutation discipline
 
 - Make one primary causal change per experiment. Record before/after values and a rollback command or file.
@@ -64,5 +77,5 @@ Only patch Wine source when evidence shows that configuration or dependency chan
 - If an experiment fails, update the hypotheses from the new evidence. Never repeat the same unchanged experiment.
 - After three failed interventions in one mutation layer, return to diagnosis before escalating; do not accumulate random tweaks.
 - Stop as blocked only when safe investigation paths are exhausted or the next action requires unavailable user-only access. State the exact missing capability and preserve the run ledger.
-- The final handoff must identify: disposition, confidence, user validation status, changed files/state, Wine branch/commit if any, test evidence, rollback, report path, and unresolved risks.
+- The final handoff must identify: disposition, confidence, user validation status, changed files/state, Wine branch/commit if any, test evidence, rollback, report path, skill self-iteration if any, and unresolved risks.
 
