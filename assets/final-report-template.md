@@ -95,6 +95,19 @@ Include exact registry restoration, container/config reversal, and branch select
 
 -
 
+## Skill self-iteration
+
+- Performed: `<yes | no>`
+- Triggering run evidence:
+- Generalized lesson:
+- Changed skill files:
+- Active installed skill path:
+- Source checkout synchronization: `<synchronized | not configured | pending>`
+- Validation performed and result:
+- Effective from: `<current run by explicit corrected rule; newly loaded instructions on next invocation>`
+
+When no skill change was warranted, state why the existing workflow was sufficient.
+
 ## Run ledger summary
 
 | State | Evidence or decision | Result |
