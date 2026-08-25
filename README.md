@@ -40,6 +40,23 @@ Discovery
 → Final report with rollback and residual risks
 ```
 
+## Component-aware diagnosis
+
+The workflow maps symptoms to the layer that can actually own the failure before applying changes. The [component responsibility map](references/components.md) covers the application and launcher, environment, Wine prefix and registry, PE loader, Wine core, Win32 UI, X11/Wayland, graphics translation and host drivers, audio, input, networking, installers, fonts/locale, containers, and Wine source.
+
+For each layer it records:
+
+- the problems that layer can solve;
+- the evidence that identifies it;
+- the failures it usually cannot solve;
+- the adjacent boundary needed for a controlled A/B test.
+
+## Regression provenance
+
+When a Wine source regression is plausible, the skill inspects relevant path and symbol history before writing a new patch. It uses path logs, `git log -S`, `git log -G`, `git blame`, release/tag comparison, controlled good/bad builds, diagnostic reverts or cherry-picks, and `git bisect` when the reproducer is deterministic.
+
+A recent commit touching the same file is treated only as a lead. The final report classifies the result as a confirmed regression, suspected regression, pre-existing implementation gap, or not attributable, and records the introducing commit or bounded suspect range with test evidence.
+
 ## Safety and repository discipline
 
 - Prefer a disposable container and dedicated `WINEPREFIX`.
