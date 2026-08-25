@@ -28,6 +28,8 @@ Treat this as an example, not a universal default. Reduce channels once the fail
 | Fonts/locale/text | installed fonts, locale/codepage, font substitution, shaping/rendering evidence |
 | Performance/timing | controlled repeated timing, CPU/GPU counters, synchronization mode, logging overhead comparison |
 
+Use [components.md](components.md) to decide which boundary owns the next probe and which apparent fixes would only mask the symptom. When evidence identifies a Wine source component, inspect its relevant commit history before assuming the current behavior is an unimplemented feature.
+
 Do not use full `+relay` indiscriminately. If function-level relay is needed, constrain it to the suspected module or call boundary and keep the reproduction short.
 
 ## Mutation ladder
@@ -50,3 +52,4 @@ Separate:
 - **observation** — directly measured output;
 - **inference** — explanation supported by observations;
 - **decision** — why the next experiment was selected.
+
