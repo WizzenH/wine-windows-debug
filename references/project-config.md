@@ -23,8 +23,15 @@ The contract should establish, directly or by discoverable command:
 - how to configure, compile, install/stage, and test Wine;
 - where reviewable reports belong;
 - which local mutations and commits are allowed.
+- whether local skill self-iteration is enabled and, if present, which source checkout mirrors the installed skill.
 
 Values may be omitted when they are reliably discoverable. Never place passwords, API keys, private certificates, or raw customer data in the contract.
+
+## Skill iteration contract
+
+`skill_iteration.enabled` defaults to `true` for this skill and may be disabled per project. An omitted or null `source_checkout` means there is no declared source mirror; update only the active installed skill and report that the public/source repository remains unsynchronized. `never_push` must remain true unless the user separately requests publication at the time of that external action.
+
+Self-iteration authorization covers only `wine-windows-debug` instructions, references, assets, and reusable scripts. It does not authorize copying project secrets or customer-specific details into the skill.
 
 ## Command handling
 
